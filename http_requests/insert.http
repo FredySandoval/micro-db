@@ -1,0 +1,36 @@
+@collectionid = QUr1yeor7WfKOGcyeOxfM 
+POST http://localhost:5000/insert?collectionid=J5GXVfBPwZQJTM77dpTJ4
+     &document={"name":"fredy", "lastname": "sandoval"} HTTP/1.1
+###
+POST http://localhost:5000/insert?collectionid=J5GXVfBPwZQJTM77dpTJ4
+     &document={"name":"fredy", "lastname": "sandoval", "age": "new Date()"} HTTP/1.1
+###
+POST http://localhost:5000/insert?collectionid=J5GXVfBPwZQJTM77dpTJ4
+     &document=name,fredy,lastname,sandoval,age,22 HTTP/1.1
+###
+POST http://localhost:5000/insert?collectionid={{collectionid}}&document={"foo": 3, "bar": "baz"} HTTP/1.1
+###
+POST http://localhost:5000/insert?collectionid={{collectionid}}&document=foo,'3',bar,2 HTTP/1.1
+###
+POST http://localhost:5000/insert?collectionid={{collectionid}} HTTP/1.1
+Content-Type: application/json
+
+{"foo": 1, "bar": "fredo"}
+###
+POST http://localhost:5000/insert?collectionid={{collectionid}} HTTP/1.1
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+###
+POST http://localhost:5000/insert?{__proto__[protoSomeRandomName]=protoSomeRandomValue}
+###
+POST http://localhost:5000/insert?__proto__[protoSomeRandomName],protoSomeRandomValue
+###
+POST http://localhost:5000/insert?"__proto__[protoSomeRandomName]","protoSomeRandomValue" HTTP/1.1
+###
+POST http://localhost:5000/insert?collectionid={{collectionid}}&document=__proto__[protoSomeRandomName],protoSomeRandomValue HTTP/1.1
+###
+POST http://localhost:5000/insert?collectionid={{collectionid}}
+     &document="random string2"

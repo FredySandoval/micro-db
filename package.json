@@ -1,0 +1,28 @@
+{
+  "name": "micro-database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon main.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.11.0",
+    "express": "^4.18.1",
+    "express-rate-limit": "^6.4.0",
+    "ip-matching": "^2.1.2",
+    "ip-range-check": "^0.2.0",
+    "is-cidr": "^4.0.2",
+    "joi": "^17.6.0",
+    "lodash-es": "^4.17.21",
+    "lowdb": "^3.0.0",
+    "nanoid": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}

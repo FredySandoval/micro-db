@@ -1,0 +1,24 @@
+@collectionid = QUr1yeor7WfKOGcyeOxfM
+@id = PeW-QH
+DELETE  http://localhost:5000/delete?collecntionid={{collectionid}}
+###
+DELETE  http://localhost:5000/delete?collectionid={{collectionid}}
+###
+DELETE  http://localhost:5000/delete?collectionid={{collectionid}}&document={"_id": "{{id}}", "password": "randompass1"}
+###
+
+DELETE  http://localhost:5000/delete?collectionid={{collectionid}}
+        &document={'_id': "4s0zgr", 'password': 'randompass1'}
+###
+
+DELETE  http://localhost:5000/delete?collectionid={{collectionid}}&document=id,1234,password,'Pass123'
+
+###
+DELETE  http://localhost:5000/delete?collectionid={{collectionid}}
+Content-Type: application/json
+
+{
+  "_id": "iN8PVW",
+  "password": "randompass1"
+}
+###

@@ -1,0 +1,31 @@
+POST http://localhost:5000/createcollection
+?email=mfigeroa@gmail.com
+&requirepasswordtodelete=false
+&password=randompass1
+&websiterestrictions=localhost
+&iprestrictions=127.0.0.1
+&schema={"type":"object","properties":{"foo":{"type":"integer"},"bar":{"type":"string"}},"required":["foo"],"additionalProperties":false} HTTP/1.1
+###
+POST http://localhost:5000/createcollection
+?email=mfigeroa@gmail.com
+&allowdelete=false
+&password=randompass1
+&websiterestrictions=localhost
+&iprestrictions=127.0.0.1 HTTP/1.1
+###
+POST http://localhost:5000/createcollection
+?email=mfigeroa@gmail.com
+&allowdelete=false
+&password=randompass1
+&websiterestrictions=localhost,website.com
+&iprestrictions=127.0.0.1/24
+&schema={username: string, score: number} HTTP/1.1
+###
+POST http://localhost:5000/createcollection
+?email=mfigeroa@gmail.com
+&allowdelete=false
+&password=randompass1
+&websiterestrictions=localhost,website.com
+&iprestrictions=127.000.000.001
+&schema={username: string, score: number} HTTP/1.1
+

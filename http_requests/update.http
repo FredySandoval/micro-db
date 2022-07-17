@@ -1,0 +1,34 @@
+@collectionid = HHi05T3tabPfzCNijYqPd
+@id = TokaDP
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+&document=fredy,sandoval
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+&document=id,TokaDP,foo,123
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+&document=_id,TokaDP,foo,1234
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+&document={"fredy": "sandoval"}
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+&document={"id": "TokaDP","foo": 12345}
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+&document={"_id": "TokaDP","foo": 3456}
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+Content-Type: application/json
+
+{"fredy": "sandoval"}
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+Content-Type: application/json
+
+{"_id": "TokaDP","foo": 789}
+###
+PATCH http://localhost:5000/update?collectionid={{collectionid}}
+Content-Type: application/json
+
+{"id": "TokaDP","foo": 2345}
