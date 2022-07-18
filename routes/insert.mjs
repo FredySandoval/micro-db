@@ -1,35 +1,28 @@
 import { Router } from 'express';
 const router = Router();
+import { isEmpty } from 'lodash-es';
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { Low, JSONFile } from 'lowdb'
 import { nanoid } from 'nanoid';
-import Joi from 'joi';
 import Ajv from 'ajv';
 const ajv = new Ajv();
 
 import ipRangeCheck from 'ip-range-check';
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const VALID_KEYS = ['collectionid', 'document'];
-const ERROR_MESSAGE = {
-    "unknown_pattern": "please use this pattern /find?collectionid=<collectionid>",
-    "not_valid": (incorrect, correct) => `${incorrect} is invalid, please use ${correct}`,
-    "invalid": (invalid) => `${invalid} is invalid`
-}
-const SCHEMA_FOR_KEYS = Joi.array().items(Joi.valid(...VALID_KEYS).required());
 
 router.post('/', async (req, res) => {
-    // schema_validation
+    if (isEmpty(req.body)) return res.status(400).send({ error: 'Empty body' });
+    const new_insert_document = req.body;
+
+    if (typeof new_insert_document !== 'object')
+        return res.status(400).send({ error: 'Invalid request body' });
+
+    // query string validation 
     const keys = Object.keys(req.query);
-    const { error } = SCHEMA_FOR_KEYS.validate(keys);
-    if (error) {
-        if (error.details[0].type == 'array.includesRequiredUnknowns') {
-            return res.status(400).send({ error: ERROR_MESSAGE.unknown_pattern });
-        }
-        const incorrect = error?.details[0]?.context?.value;
-        const message = ERROR_MESSAGE.not_valid(incorrect, VALID_KEYS);
-        return res.status(400).send({ error: message });
-    }
+    if (keys.length === 0) return res.status(400).send({ error: 'No collectionid provided' });
+    if (keys.length > 1) return res.status(400).send({ error: "Usage example: /insert?collectionid=XYz..." });
+    if (keys[0] !== 'collectionid') return res.status(400).send({ error: "Usage example: /insert?collectionid=XYz..." });
 
     // Load collection
     const collectionid = req.query.collectionid;
@@ -43,18 +36,16 @@ router.post('/', async (req, res) => {
         return res.status(404).send({ error: 'collection not found' });
     }
     // check websiterestrictions
-    const websiterestrictions = db.data?.websiterestrictions?.split(',');
-    if (websiterestrictions) {
+    if (db.data?.websiterestrictions) {
         const hostname = req.hostname;
-        if (websiterestrictions.indexOf(hostname) == -1) {
+        if (db.data?.websiterestrictions.indexOf(hostname) == -1) {
             return res.status(403).send({ error: '1 you are not allowed to access this collection' });
         }
     }
     // check iprestrictions
-    const iprestrictions = db.data?.iprestrictions?.split(',');
-    if (iprestrictions) {
+    if (db.data?.iprestrictions) {
         const ip = req.ip;
-        const checkip = iprestrictions.some(iprange => {
+        const checkip = db.data?.iprestrictions.some(iprange => {
             if (ipRangeCheck(ip, iprange)) {
                 return true;
             }
@@ -64,60 +55,19 @@ router.post('/', async (req, res) => {
         }
     }
 
-    // insert to collection
-    let document = req.query.document || req.body;
-    if (!document) {
-        return res.status(400).send({ error: 'No document provided' });
-    };
-    if (typeof document == 'string') {
-        try {
-            document = JSON.parse(document);
-        }
-        catch (e) {
-            console.log('e1', e);
-            var temp = document.split(","), theobj = {};
-            console.log('temp', temp);
-            if (temp.length < 2 || temp.length % 2 != 0) {
-                return res.status(400).send({ error0: ERROR_MESSAGE.invalid(document) });
-            }
-            for (let i = 0; i < temp.length; i += 2) {
-                // little check if number of boolean
-                temp[(i + 1)] = /^\d+$/.test(temp[(i + 1)]) ? Number(temp[i + 1]) : temp[(i + 1)];
-                temp[(i + 1)] = temp[(i + 1)] === "true" || temp[(i + 1)] === "false" ? Boolean(temp[(i + 1)]) : temp[(i + 1)];
-                theobj[temp[i]] = temp[(i + 1)];
-            }
-            document = theobj;
-        }
-    }
-    // checks before insert
-    if (Object.keys(document).length === 0) {
-        return res.status(400).send({ error1: 'Document is emtpy, check your post request if unsure' });
-    }
-    let typeof_document = typeof document;
-    if (!document ||
-        typeof_document !== 'object' ||
-        Array.isArray(document) ||
-        typeof_document === 'function' ||
-        typeof_document === 'symbol' ||
-        typeof_document === 'boolean' ||
-        typeof_document === 'number' ||
-        typeof_document === 'string' ||
-        typeof_document === 'undefined' ||
-        typeof_document === 'null'
-    ) {
-        return res.status(400).send({ error2: ERROR_MESSAGE.invalid(document) });
-    }
+    // User schema validation
     if (db.data?.schema) {
-        const valid = ajv.validate(db.data?.schema, document);
+        const valid = ajv.validate(db.data?.schema, new_insert_document);
         if (!valid) {
             return res.status(400).send({ error: ajv.errorsText(ajv.errors) });
         }
     }
 
     // if no id, generate one
-    if (!(document._id || document.id)) Object.assign(document, { _id: nanoid(6) });
+    if (!(new_insert_document._id ||
+        new_insert_document.id)) Object.assign(new_insert_document, { _id: nanoid(6) });
 
-    db.data.documents.push(document);
+    db.data.documents.push(new_insert_document);
     await db.write();
 
     // updating main index.json
@@ -134,7 +84,7 @@ router.post('/', async (req, res) => {
     };
     await index_db.write();
 
-    res.status(200).json({data: document});
+    res.status(200).json({ data: new_insert_document });
 });
 
 export { router as insert }

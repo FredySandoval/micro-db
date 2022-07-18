@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
 
     const [error_1] = validate_new_collection(new_collection_data);
     if (error_1) {
-        return res.status(400).send({ error_1: error_1.details });
+        return res.status(400).send({ error: error_1.details });
     }
 
     // Hash password
