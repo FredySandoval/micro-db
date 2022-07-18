@@ -1,6 +1,5 @@
 import express from 'express';
 import { networkInterfaces } from 'os';
-
 const app = express();
 app.set('trust proxy', 4);
 app.use(express.json());

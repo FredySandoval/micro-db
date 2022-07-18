@@ -1,103 +1,77 @@
 import { Router } from 'express';
 const router = Router();
-import Joi from 'joi';
-import isCidr from 'is-cidr';
-import net from 'net';
-import { schema_validation } from '../tools/utils.mjs';
+import bcript from 'bcryptjs'
+import { isEmpty } from 'lodash-es';
+import { validate_new_collection } from '../tools/schema_validations.mjs';
 import { nanoid } from 'nanoid';
 import { join, dirname } from 'path'
 import { Low, JSONFile } from 'lowdb'
 import { fileURLToPath } from 'url'
 
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
-let VALID_KEYS = ['email', 'password', 'collectionname', 'requirepasswordtodelete', 'websiterestrictions', 'iprestrictions', 'schema'];
-const schema_keys = Joi.array().items(Joi.valid(...VALID_KEYS));
 
 router.post('/', async (req, res) => {
-    const keys = Object.keys(req.query)
-    const { error } = schema_keys.validate(keys);
-    if (error) {
-        const contextvalue = error?.details[0]?.context?.value;
-        const message = `${contextvalue} not valid, please use ${VALID_KEYS}`;
-        return res.status(400).send({ error: message });
-    }
-    const collectionid = nanoid();
-    const collectionname = req.query.collectionname;
-    const email = req.query.email;
-    const password = req.query.password;
-    const allowdelete = req.query.allowdelete;
-    const requirepasswordtodelete = req.query.requirepasswordtodelete;
-    const schema = req.query.schema || req.body.schema;
-    const websiterestrictions = req.query.websiterestrictions;
-    const iprestrictions = req.query.iprestrictions;
+    const body = !isEmpty(req.body) ? req.body : null;
+    const new_collection_data = body || req.query;
 
-    if (websiterestrictions && !password) {
-        return res.status(400).send({ error: 'if websiterestrictions set, provide password, to prevent being locked out' });
-    }
+    if (typeof new_collection_data !== 'object') return res.status(400).send({ error: 'Invalid request body' });
+    if (!new_collection_data.collectionname) new_collection_data.collectionname = 'Untitled';
 
-    // check if ip addresses are valid
-    if (iprestrictions) {
-        const iprestrictions_array = iprestrictions.split(',');
-        const iprestrictions_valid = iprestrictions_array.every(ip => {
-            return (net.isIPv4(ip) || net.isIPv6(ip) || isCidr(ip) !== 0);
-        });
-        if (!iprestrictions_valid) {
-            return res.status(400).send({ error: 'invalid ip address detected, please use ipv4, ipv6, or cidr e.g. 192.168.0.1/24' });
-        }
-    }
-    // schema JSON treatment
-    let json_schema
-    if (schema) {
-        if (typeof schema == 'string') {
+    Object.assign(new_collection_data, { collectionid: nanoid() });
+    Object.assign(new_collection_data, { createdat: new Date().toISOString() });
+    Object.assign(new_collection_data, { updatedat: new Date().toISOString() });
+    Object.assign(new_collection_data, { documents: [] });
+
+    const keys_to_parse = ['websiterestrictions', 'iprestrictions', 'schema'];
+    for (let key of keys_to_parse) {
+        if (typeof new_collection_data[key] === 'string') {
             try {
-                json_schema = JSON.parse(schema);
+                new_collection_data[key] = new_collection_data[key].replace(/\'/g, '\"');
+                new_collection_data[key] = JSON.parse(new_collection_data[key]);
+            } catch (error) {
+                return res.status(400).send({ error: `Invalid JSON in ${key}` });
             }
-            catch (e) {
-                return res.status(400).send({ error: '1 schema is not valid JSON' });
-            }
-        }
-        if (!json_schema || typeof json_schema != 'object') {
-            return res.status(400).send({ error: '2 schema is not valid JSON' });
+
         }
     }
-    // end schema JSON treatment
-    const file = join(__dirname, '..', 'collections', `${collectionid}.json`);
+
+    const [error_1] = validate_new_collection(new_collection_data);
+    if (error_1) {
+        return res.status(400).send({ error_1: error_1.details });
+    }
+
+    // Hash password
+    let password_length;
+    if (new_collection_data.password) {
+        password_length = new_collection_data.password.length;
+        const salt = await bcript.genSalt(10);
+        const hashed_password = await bcript.hash(new_collection_data.password, salt);
+        new_collection_data.password = hashed_password;
+    }
+    const file = join(__dirname, '..', 'collections', `${new_collection_data.collectionid}.json`);
     const adapter = new JSONFile(file);
     const db = new Low(adapter);
 
-    const date = new Date();
-    const newCollection = {
-        collectionid: collectionid,
-        createdat: date,
-        updatedat: date,
-        collectionname: collectionname,
-        email: email,
-        password: password,
-        allowdelete: allowdelete,
-        requirepasswordtodelete: requirepasswordtodelete,
-        schema: json_schema,
-        websiterestrictions,
-        iprestrictions,
-        documents: []
-    };
-
-    db.data = newCollection;
-
+    db.data = new_collection_data;
     await db.write()
+    // fill the password with * characters
+    if (new_collection_data.password) new_collection_data.password = '*'.repeat(password_length);
 
+    // Load index.js file
     const index_file = join(__dirname, '..', 'collections_index', 'index.json');
     const index_adapter = new JSONFile(index_file);
     const index_db = new Low(index_adapter);
     await index_db.read();
     index_db.data.push({
-        collectionid: collectionid,
-        createdat: date,
-        updatedat: date,
+        collectionid: new_collection_data.collectionid,
+        createdat: new_collection_data.createdat,
+        updatedat: new_collection_data.updatedat,
         numberofdocuments: 0,
     });
 
     await index_db.write();
-    res.json(newCollection);
+    res.json(new_collection_data);
 });
 
 export { router as createcollection };

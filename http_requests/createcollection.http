@@ -1,25 +1,38 @@
+
 POST http://localhost:5000/createcollection
-?email=mfigeroa@gmail.com
+?collectionname=myrandomcollection
 &requirepasswordtodelete=false
+&email=mfigeroa@gmail.com
 &password=randompass1
-&websiterestrictions=localhost
-&iprestrictions=127.0.0.1
-&schema={"type":"object","properties":{"foo":{"type":"integer"},"bar":{"type":"string"}},"required":["foo"],"additionalProperties":false} HTTP/1.1
+&websiterestrictions=["google.com","facebook.com"]
+&iprestrictions=["127.0.0.1"]
+&schema={"type": "object","properties": {"foo": { "type": "array", "items": { "type": "string" }, "maxItems": 3 },"bar": { "type": "string", "maxLength": 3, "minLength": 1 },"fooo": { "type": "number", "minimum": 1, "maximum": 10 },"bax": { "type": "boolean" },"baz": { "type": "object", "minProperties": 1, "maxProperties": 3, "required": ["foo", "bar"] }},"required": ["foo", "bar", "fooo"],"additionalProperties": false} HTTP/1.1
+### Basic 2
+POST http://localhost:5000/createcollection HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "shockerovip@gmail.com",
+    "password": "randompass1",
+    "schema": {
+    "type": "object",
+    "properties": {
+        "foo": { "type": "array", "items": { "type": "string" }, "maxItems": 3 },
+        "bar": { "type": "string", "maxLength": 3, "minLength": 1 },
+        "fooo": { "type": "number", "minimum": 1, "maximum": 10 },
+        "bax": { "type": "boolean" },
+        "baz": { "type": "object", "minProperties": 1, "maxProperties": 3, "required": ["foo", "bar"] }
+    },
+    "required": ["foo", "bar", "fooo"],
+    "additionalProperties": false
+    }
+}
 ###
 POST http://localhost:5000/createcollection
 ?email=mfigeroa@gmail.com
-&allowdelete=false
 &password=randompass1
-&websiterestrictions=localhost
-&iprestrictions=127.0.0.1 HTTP/1.1
-###
-POST http://localhost:5000/createcollection
-?email=mfigeroa@gmail.com
-&allowdelete=false
-&password=randompass1
-&websiterestrictions=localhost,website.com
-&iprestrictions=127.0.0.1/24
-&schema={username: string, score: number} HTTP/1.1
+&websiterestrictions=['website.com']
+&iprestrictions=["127.0.0.1/24"] HTTP/1.1
 ###
 POST http://localhost:5000/createcollection
 ?email=mfigeroa@gmail.com
