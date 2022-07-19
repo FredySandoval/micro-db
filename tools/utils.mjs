@@ -71,7 +71,8 @@ const ERROR_MESSAGE = {
     "no_json": "1 - no JSON object found",
     "unknown_pattern": "please use this pattern /find?collectionid=<collectionid>",
     "not_valid": (incorrect, correct) => `${incorrect} is invalid, please use ${correct}`,
-    "invalid": (invalid) => `${invalid} is invalid`
+    "invalid": (THIS_FILE, invalid) => `${THIS_FILE} - ${invalid} is invalid`,
+    "unallowed": (THIS_FILE, invalid) => `${THIS_FILE} - ${invalid} is unallowed`,
 }
 /**
  * 
@@ -113,13 +114,88 @@ function schema_validation(req, SCHEMA_FOR_KEYS, VALID_KEYS) {
     const { error } = SCHEMA_FOR_KEYS.validate(keys);
     if (error) {
         if (error.details[0].type == 'array.includesRequiredUnknowns') {
-            return [ ERROR_MESSAGE.unknown_pattern ];
+            return [ERROR_MESSAGE.unknown_pattern];
         }
         const incorrect = error?.details[0]?.context?.value;
         const message = ERROR_MESSAGE.not_valid(incorrect, VALID_KEYS);
-        return [ message ];
-    }    
-    return [ null ];
+        return [message];
+    }
+    return [null];
+}
+import ipRangeCheck from 'ip-range-check';
+function check_restrictions(WICH_FILE, req, db) {
+    // check websiterestrictions
+    if (db.data?.websiterestrictions) {
+        const hostname = req.hostname;
+        if (db.data?.websiterestrictions.indexOf(hostname) == -1) {
+            return [ERROR_MESSAGE.unallowed(WICH_FILE, 'domain')];
+            // return res.status(403).send({ error: '1 you are not allowed to access this collection' });
+        }
+    }
+    // check iprestrictions
+    if (db.data?.iprestrictions) {
+        const ip = req.ip;
+        const checkip = db.data?.iprestrictions?.some(iprange => {
+            if (ipRangeCheck(ip, iprange)) {
+                return true;
+            }
+        })
+        if (!checkip) {
+            return [ERROR_MESSAGE.unallowed(WICH_FILE, 'ip')];
+            // return res.status(403).json({ error: '2 you are not allowed to access this collection' });
+        }
+    }
+    return [null];
+}
+import bcript from 'bcryptjs';
+function is_password_valid(req, db) {
+    const password = req.body?.password || req.query?.password;
+    if (db.data?.password) {
+        // hashed password 
+        if (!password) return [false]
+        const password_matches = bcript.compareSync(password, db.data?.password);
+        return [password_matches];
+        // const password_matches =  password == db.data?.password;
+        // if (db.data?.requirepasswordtodelete && !req.query.password) {
+        //     return [ERROR_MESSAGE.invalid(', WHICH_FILE', 1 - password)];
+        //     // return res.status(403).send({ error: '1 password required' });
+        // }
+        // if (db.data?.requirepasswordtodelete && !password_matches) {
+        //     return [ERROR_MESSAGE.invalid(WHICH_FILE, '2-password')];
+        //     // return res.status(403).send({ error: '2 password incorrect' });
+        // }
+    }
+    return [true];
 }
 
-export { JSONparse, schema_validation, ERROR_MESSAGE };
+function query_keys_validation(req, VALID_KEYS) {
+    const query_keys = Object.keys(req.query);
+    if (query_keys.length === 0)
+        return ['no query keys found'];
+    if (query_keys.length > VALID_KEYS.length)
+        return ['invalid query keys'];
+    const query_check = query_keys.every(key => VALID_KEYS.includes(key) === true);
+    if (!query_check)
+        return [`use only ${VALID_KEYS}`];
+    return [null];
+}
+
+function get_document_key_id(req) {
+    let keys = [];
+    keys.push(...Object.keys(req.body));
+    keys.push(...Object.keys(req.query));
+    const _key = keys.find(key => key === '_id' || key === 'id');
+    const id = req.body[_key] || req.query[_key];
+    return [_key, id];
+}
+
+export {
+    JSONparse,
+    schema_validation,
+    ERROR_MESSAGE,
+    // check_password,
+    is_password_valid,
+    check_restrictions,
+    query_keys_validation,
+    get_document_key_id
+};

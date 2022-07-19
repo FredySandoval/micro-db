@@ -9,7 +9,11 @@ import Ajv from 'ajv';
 const ajv = new Ajv();
 
 import ipRangeCheck from 'ip-range-check';
+import { check_restrictions, query_keys_validation } from '../tools/utils.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const VALID_KEYS = ['collectionid', '_id', 'id'];
+const WHICH_FILE = "i - ";
 
 router.post('/', async (req, res) => {
     if (isEmpty(req.body)) return res.status(400).send({ error: 'Empty body' });
@@ -19,10 +23,8 @@ router.post('/', async (req, res) => {
         return res.status(400).send({ error: 'Invalid request body' });
 
     // query string validation 
-    const keys = Object.keys(req.query);
-    if (keys.length === 0) return res.status(400).send({ error: 'No collectionid provided' });
-    if (keys.length > 1) return res.status(400).send({ error: "Usage example: /insert?collectionid=XYz..." });
-    if (keys[0] !== 'collectionid') return res.status(400).send({ error: "Usage example: /insert?collectionid=XYz..." });
+    const [error1] = query_keys_validation(req,VALID_KEYS);
+    if (error1) return res.status(400).send({ error: WHICH_FILE + error1 });
 
     // Load collection
     const collectionid = req.query.collectionid;
@@ -36,24 +38,8 @@ router.post('/', async (req, res) => {
         return res.status(404).send({ error: 'collection not found' });
     }
     // check websiterestrictions
-    if (db.data?.websiterestrictions) {
-        const hostname = req.hostname;
-        if (db.data?.websiterestrictions.indexOf(hostname) == -1) {
-            return res.status(403).send({ error: '1 you are not allowed to access this collection' });
-        }
-    }
-    // check iprestrictions
-    if (db.data?.iprestrictions) {
-        const ip = req.ip;
-        const checkip = db.data?.iprestrictions.some(iprange => {
-            if (ipRangeCheck(ip, iprange)) {
-                return true;
-            }
-        })
-        if (!checkip) {
-            return res.status(403).json({ error: '2 you are not allowed to access this collection' });
-        }
-    }
+    const [error2] = check_restrictions(WHICH_FILE, req, db); 
+    if (error2) return res.status(403).send({ error: error2 });
 
     // User schema validation
     if (db.data?.schema) {

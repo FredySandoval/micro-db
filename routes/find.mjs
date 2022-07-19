@@ -1,31 +1,20 @@
 import { Router } from 'express';
 const router = Router();
-import Joi from 'joi';
-import ipRangeCheck from 'ip-range-check';
 import { find } from "lodash-es";
-// import { nanoid } from 'nanoid';
 import { join, dirname } from 'path'
 import { Low, JSONFile } from 'lowdb'
 import { fileURLToPath } from 'url'
+import { check_restrictions, get_document_key_id, query_keys_validation } from '../tools/utils.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-let valid_keys = ['collectionid', '_id', 'id'];
-const schema_keys = Joi.array().items(Joi.valid(...valid_keys).required());
-
+const WHICH_FILE = "f - "
+const VALID_KEYS = ['collectionid', '_id', 'id'];
 
 router.get('/', async (req, res) => {
-
-    // schema validation
-    const keys = Object.keys(req.query);
-    const { error } = schema_keys.validate(keys);
-    if (error) {
-        if (error.details[0].type == 'array.includesRequiredUnknowns') {
-            return res.status(400).send({ error: 'please use this pattern /find?collectionid=<collectionid>' });
-        }
-        const contextvalue = error?.details[0]?.context?.value;
-        const message = `${contextvalue} not valid, please use ${valid_keys}`;
-        return res.status(400).send({ error: message });
-    }
+    
+    // query validation
+    const [error1] = query_keys_validation(req, VALID_KEYS)
+    if (error1) return res.status(400).send({ error: WHICH_FILE + error1 })
 
     // Load collection
     const collectionid = req.query.collectionid;
@@ -39,38 +28,24 @@ router.get('/', async (req, res) => {
         return res.status(404).send({ error: 'collection not found' });
     }
 
-    // check websiterestrictions
-   const websiterestrictions = db.data.websiterestrictions?.split(',');
-    if (websiterestrictions) {
-        const hostname = req.hostname;
-        if (websiterestrictions.indexOf(hostname) == -1) {
-            return res.status(403).send({ error: '1 you are not allowed to access this collection' });
-        }
-    }
-    // check iprestrictions
-    const iprestrictions = db.data.iprestrictions?.split(',');
-    if (iprestrictions) {
-        const ip = req.ip;
-        const checkip = iprestrictions.some(iprange => {
-            if (ipRangeCheck(ip, iprange)) {
-                return true;
-            }
-        })
-        if (!checkip) {
-            return res.status(403).send({ error: '2 you are not allowed to access this collection' });
-        }
-    }
+    // Check restrictions
+    const [error2] = check_restrictions(WHICH_FILE, req, db);
+    if (error2) return res.status(403).send({ error: error2 });
+
+
+    // check db.data.websiterestrictions
+    const [error3] = check_restrictions(WHICH_FILE, req, db);
+    if (error3) return res.status(403).send({ error: error3 });
 
     const documents = db?.data?.documents;
-    const temp_id = req.query._id || req.query.id;
-    const tempid = req.body._id || req.body.id;
-    const id = temp_id || tempid; 
-    if ( id ) {
+    const [_key, id] = get_document_key_id(req);
+    console.log('_key, id', _key, id);
+    if (id) {
         const document = find(documents, { _id: id });
-        console.log('document', document);
-        return res.status(200).json({data: document});
+        if (!document) return res.status(404).send({ error: 'document not found' });
+        return res.status(200).json({ data: document });
     }
-    res.status(200).json({data: documents});
+    res.status(200).json({ data: documents });
 });
 
 export { router as find }

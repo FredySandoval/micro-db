@@ -1,7 +1,15 @@
-@collectionid = HHi05T3tabPfzCNijYqPd
-@id = TokaDP
+@collectionid = hY5sSsJYoThGyiVV7QHRr
+
+@id = 3G3zcP
 PATCH http://localhost:5000/update?collectionid={{collectionid}}
-&document=fredy,sandoval
+Content-Type: application/json
+
+{
+  "_id": "{{id}}",
+  "foo":["This is brand new"],
+  "bar": "Yea",
+  "fooo" : 6
+}
 ###
 PATCH http://localhost:5000/update?collectionid={{collectionid}}
 &document=id,TokaDP,foo,123

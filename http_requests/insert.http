@@ -1,4 +1,4 @@
-@collectionid = dXSyfGyrZ2ucz3ZyTJXz- 
+@collectionid = hY5sSsJYoThGyiVV7QHRr
 
 POST http://localhost:5000/insert?collectionid={{collectionid}} HTTP/1.1
 Content-Type: application/json

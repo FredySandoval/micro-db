@@ -1,4 +1,5 @@
-@documentid = HHi05T3tabPfzCNijYqPd 
+@collectionid = hY5sSsJYoThGyiVV7QHRr 
+@documentid = Hz5POr
 GET http://localhost:5000/find HTTP/1.1
 ###
 GET http://localhost:5000/find?collectionid=noexistedyouknow HTTP/1.1
@@ -7,9 +8,6 @@ GET http://localhost:5000/find?collectioniderror={{documentid}} HTTP/1.1
 ###
 GET http://localhost:5000/find?cwoefe=hVfwe&jofw=fowe HTTP/1.1
 ###
-GET https://3ab8-190-14-129-217.ngrok.io/find?collectionid={{documentid}} HTTP/1.1
-
+GET http://localhost:5000/find?collectionid={{collectionid}} HTTP/1.1
 ###
-GET http://localhost:5000/find?collectionid={{documentid}} HTTP/1.1
-###
-GET http://localhost:5000/find?collectionid={{documentid}}&id=Sjewf9 HTTP/1.1
+GET http://localhost:5000/find?collectionid={{collectionid}}&id={{documentid}} HTTP/1.1

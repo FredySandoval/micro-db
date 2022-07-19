@@ -14,17 +14,20 @@ Content-Type: application/json
 {
     "email": "shockerovip@gmail.com",
     "password": "randompass1",
+    "requirepasswordtodelete": true,
+    "websiterestrictions": ["google.com","localhost"],
+    "iprestrictions": ["127.0.0.1"],
     "schema": {
-    "type": "object",
-    "properties": {
-        "foo": { "type": "array", "items": { "type": "string" }, "maxItems": 3 },
-        "bar": { "type": "string", "maxLength": 3, "minLength": 1 },
-        "fooo": { "type": "number", "minimum": 1, "maximum": 10 },
-        "bax": { "type": "boolean" },
-        "baz": { "type": "object", "minProperties": 1, "maxProperties": 3, "required": ["foo", "bar"] }
-    },
-    "required": ["foo", "bar", "fooo"],
-    "additionalProperties": false
+        "type": "object",
+        "properties": {
+            "foo": { "type": "array", "items": { "type": "string" }, "maxItems": 3 },
+            "bar": { "type": "string", "maxLength": 3, "minLength": 1 },
+            "fooo": { "type": "number", "minimum": 1, "maximum": 10 },
+            "bax": { "type": "boolean" },
+            "baz": { "type": "object", "minProperties": 1, "maxProperties": 3, "required": ["foo", "bar"] }
+        },
+        "required": ["foo", "bar", "fooo"],
+        "additionalProperties": false
     }
 }
 ###

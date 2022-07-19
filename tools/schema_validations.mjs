@@ -42,7 +42,7 @@ const SCHEMA_FOR_NEW_COLLECTION = Joi.object({
     email: Joi.string().email().optional(),
     password: Joi.string().pattern(/^[a-zA-Z0-9]{4,30}$/).optional(),
     requirepasswordtodelete: Joi.boolean().optional(),
-    websiterestrictions: Joi.array().items(Joi.string().domain()).optional(),
+    websiterestrictions: Joi.array().items(Joi.alternatives().try( Joi.string().valid("localhost"), Joi.string().domain())).optional(),
     iprestrictions: Joi.array().items(Joi.string().ip({ version: ['ipv4', 'ipv6'], cidr: 'optional' })).optional(),
     schema: Joi.object().optional(),
     documents: Joi.array().empty().required()
