@@ -42,7 +42,7 @@ const SCHEMA_FOR_NEW_COLLECTION = Joi.object({
     email: Joi.string().email().optional(),
     password: Joi.string().pattern(/^[a-zA-Z0-9]{4,30}$/).optional(),
     requirepasswordtodelete: Joi.boolean().optional(),
-    websiterestrictions: Joi.array().items(Joi.alternatives().try( Joi.string().valid("localhost"), Joi.string().domain())).optional(),
+    websiterestrictions: Joi.array().items(Joi.alternatives().try(Joi.string().valid("localhost"), Joi.string().domain())).optional(),
     iprestrictions: Joi.array().items(Joi.string().ip({ version: ['ipv4', 'ipv6'], cidr: 'optional' })).optional(),
     schema: Joi.object().optional(),
     documents: Joi.array().empty().required()
@@ -126,3 +126,30 @@ function validate_new_collection(data) {
     return [null];
 }
 export { validate_new_collection };
+
+const SCHEMA_FOR_ADMIN_UPDATE = Joi.object({
+    collectionname: Joi.string().min(3).max(30).optional(),
+    requirepasswordtodelete: Joi.boolean().optional(),
+    websiterestrictions: Joi.array().items(Joi.alternatives().try(Joi.string().valid("localhost"), Joi.string().domain())).optional(),
+    iprestrictions: Joi.array().items(Joi.string().ip({ version: ['ipv4', 'ipv6'], cidr: 'optional' })).optional(),
+    schema: Joi.object().optional(),
+});
+
+function validate_updated_collection(data) {
+    const schema_0 = SCHEMA_FOR_ADMIN_UPDATE.validate(data);
+    if (schema_0.error) return [schema_0.error];
+    if (data.schema) {
+        const schema_1 = SCHEMA_FOR_USER_PROVIDED_SCHEMA.validate(data.schema);
+        if (schema_1.error) return [schema_1.error];
+        let error_2 = null; // this is done to exit the loop below
+        if (data.schema?.properties) {
+            Object.values(data.schema.properties).forEach(property => {
+                const schema_2 = SCHEMA_FOR_SCHEMA_PROPERTIES.validate(property);
+                if (schema_2.error) { error_2 = schema_2.error; return }
+            });
+            if (error_2) return [error_2];
+        }
+    }
+    return [null];
+}
+export { validate_updated_collection };

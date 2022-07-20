@@ -4,7 +4,6 @@ const router = Router();
 import { unlinkSync } from 'fs';
 import { remove, findIndex, isEmpty } from 'lodash-es'
 import { 
-    JSONparse, 
     is_password_valid, 
     check_restrictions, 
     query_keys_validation, 
@@ -71,7 +70,8 @@ router.delete('/', async (req, res) => {
         await index_db.write();
         return res.status(200).send({ message: 'Entire collection deleted' });
     }
-    // deletes entire collection-----------------------------------------------
+
+    // remove document-------------------------------------------------------
     if (db.data.requirepasswordtodelete && !password_valid) return res.status(403).json({ error: 'd5 - password is invalid or not present' });
     const deleted = remove(db.data.documents, { [_key]: id });
     if (isEmpty(deleted)) { return res.status(404).send({ error5: 'document not found' }); }

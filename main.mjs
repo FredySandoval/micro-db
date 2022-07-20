@@ -24,6 +24,9 @@ app.use('/update', limit_1000max_60min, update);
 import { delet } from './routes/delete.mjs';
 app.use('/delete', limit_1000max_60min, delet );
 
+import { admin } from './routes/admin.mjs';
+app.use('/admin', limit_1000max_60min, admin);
+
 if (!process.env.production) {
     var interfaces = networkInterfaces(), localhostIP;
     for (var k in interfaces) {
