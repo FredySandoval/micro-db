@@ -10,8 +10,13 @@ import { fileURLToPath } from 'url'
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+// Load index.js file
+const index_file = join(__dirname, '..', 'collections_index', 'index.json');
+const index_adapter = new JSONFile(index_file);
+const index_db = new Low(index_adapter);
 
 router.post('/', async (req, res) => {
+    await index_db.read();
     const body = !isEmpty(req.body) ? req.body : null;
     const new_collection_data = body || req.query;
 
@@ -58,11 +63,6 @@ router.post('/', async (req, res) => {
     // fill the password with * characters
     if (new_collection_data.password) new_collection_data.password = '*'.repeat(password_length);
 
-    // Load index.js file
-    const index_file = join(__dirname, '..', 'collections_index', 'index.json');
-    const index_adapter = new JSONFile(index_file);
-    const index_db = new Low(index_adapter);
-    await index_db.read();
     index_db.data.push({
         collectionid: new_collection_data.collectionid,
         createdat: new_collection_data.createdat,

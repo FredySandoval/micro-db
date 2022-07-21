@@ -39,13 +39,12 @@ router.get('/', async (req, res) => {
 
     const documents = db?.data?.documents;
     const [_key, id] = get_document_key_id(req);
-    console.log('_key, id', _key, id);
     if (id) {
         const document = find(documents, { _id: id });
         if (!document) return res.status(404).send({ error: 'document not found' });
         return res.status(200).json({ data: document });
     }
-    res.status(200).json({ data: documents });
+    res.status(200).json( documents );
 });
 
 export { router as find }

@@ -22,12 +22,15 @@ const WHICH_FILE = "D - "
 const index_file = join(__dirname, '..', 'collections_index', 'index.json');
 const index_adapter = new JSONFile(index_file);
 const index_db = new Low(index_adapter);
+
 router.delete('/', async (req, res) => {
+    await index_db.read();
+    const DELETE_ENTIRE_COLLECTION = req.body.deleteentirecollection || req.query.deleteentirecollection;
     // schema_validation------------------------------------------------------
     const [error1] = query_keys_validation(req, VALID_KEYS);
     if (error1) return res.status(400).send({ error: WHICH_FILE + error1 });
-    // get document id-------------------------------------------------------
-    const [_key, id] = get_document_key_id(req);
+    // schema_validation------------------------------------------------------
+
 
     // Load user collection----------------------------------------------------
     const collectionid = req.query.collectionid;
@@ -35,40 +38,24 @@ router.delete('/', async (req, res) => {
     const file = join(__dirname, '..', 'collections', `${collectionid}.json`);
     const adapter = new JSONFile(file);
     const db = new Low(adapter);
-
     await db.read();
-    await index_db.read();
 
-    // Check restrictions-------------------------------------------------------
-    const [error3] = check_restrictions(WHICH_FILE, req, db)
-    if (error3) return res.status(403).send({ error: error3 });
+
 
     // check collection found----------------------------------------------------
     if (db.data == null) {
         return res.status(404).send({ error1: 'D-2 collection not found' });
     }
+    // Check restrictions-------------------------------------------------------
+    const [error3] = check_restrictions(WHICH_FILE, req, db)
+    if (error3) return res.status(403).send({ error: error3 });
+
     // password check-------------------------------------------------------
     const [password_valid] = is_password_valid(req, db);
 
-    // deletes the collection only
-    if (_key && id && typeof id === 'string' && id.length > 0) {
-        if (db.data.requirepasswordtodelete && !password_valid)
-            return res.status(403).json({ error: 'd5 - password is invalid or not present' });
-        const deleted = remove(db.data.documents, { [_key]: id });
-        if (isEmpty(deleted)) { return res.status(404).send({ error5: 'document not found' }); }
+    // get document id-------------------------------------------------------
+    const [_key, id] = get_document_key_id(req);
 
-        const i_db = findIndex(index_db.data, { collectionid: collectionid });
-        if (i_db == -1) return res.status(404).send({ error: 'd-0 collection not found' });
-        index_db.data[i_db].updatedat = new Date();
-        index_db.data[i_db].numberofdocuments = db.data.documents.length;
-
-        await db.write();
-        await index_db.write();
-
-        return res.status(200).send(deleted);
-    }
-
-    const DELETE_ENTIRE_COLLECTION = req.body.deleteentirecollection || req.query.deleteentirecollection;
     // deletes entire collection-----------------------------------------------
     if (!id && !collectionid) return res.status(400).json({ error: '1 id or collectionid is required' });
     if (!id && collectionid) {
@@ -85,7 +72,25 @@ router.delete('/', async (req, res) => {
         }
         return res.status(200).send({ data: 'Entire collection deleted' });
     }
-    return res.status(400).send({ error: 'd-3 fall back' });
+    // remove document-------------------------------------------------------
+    if (db.data.requirepasswordtodelete && !password_valid) return res.status(403).json({ error: 'd5 - password is invalid or not present' });
+    const deleted = remove(db.data.documents, { [_key]: id });
+    if (isEmpty(deleted)) { return res.status(404).send({ error5: 'document not found' }); }
+    await db.write();
+
+    // Update index.json------------------------------------------------------
+    const i_db = findIndex(index_db.data, { collectionid: collectionid });
+    if (i_db == -1) return res.status(404).send({ error: 'd-0 collection not found' });
+    index_db.data[i_db].updatedat = new Date();
+    index_db.data[i_db].numberofdocuments = db.data.documents.length;
+    await index_db.write();
+    // Update index.json------------------------------------------------------
+
+    if (deleted) return res.status(200).send({ data: 'document deleted', deleted: deleted });
+
+    // fallback-------------------------------------------------------
+    return res.status(404).send({ error: 'nothing done' });
+    // fallback-------------------------------------------------------
 });
 
-export { router as delet };
+export { router as delet }

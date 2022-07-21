@@ -145,7 +145,7 @@ function validate_updated_collection(data) {
         if (data.schema?.properties) {
             Object.values(data.schema.properties).forEach(property => {
                 const schema_2 = SCHEMA_FOR_SCHEMA_PROPERTIES.validate(property);
-                if (schema_2.error) { error_2 = schema_2.error; return }
+                if (schema_2.error) { error_2 = schema_2.error; return;}
             });
             if (error_2) return [error_2];
         }

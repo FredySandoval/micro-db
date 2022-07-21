@@ -44,4 +44,5 @@ POST http://localhost:5000/createcollection
 &websiterestrictions=localhost,website.com
 &iprestrictions=127.000.000.001
 &schema={username: string, score: number} HTTP/1.1
-
+###
+POST http://localhost:5000/createcollection?random=random HTTP/1.1

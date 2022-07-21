@@ -1,0 +1,24 @@
+@collectionid = hY5sSsJYoThGyiVV7QHRr
+@password = randompass1
+PATCH http://localhost:5000/admin?collectionid={{collectionid}}&password={{password}}
+Content-Type: application/json
+
+{
+  "collectionname": "MyNew Collection",
+  "requirepasswordtodelete": true,
+  "websiterestrictions": ["maple.com"],
+  "iprestrictions": ["127.0.0.1"],
+  "schema" : { 
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "age": {
+        "type": "number"
+      }
+    },
+    "required": ["name"],
+    "additionalProperties": false
+   }
+}
