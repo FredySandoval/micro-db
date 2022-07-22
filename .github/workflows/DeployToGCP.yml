@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - run: bash deploy.sh
+      - run: bash test.sh
       
       # - name: Install dependencies
       # - run: export PATH=/home/shockerovip/.fnm:$PATH
