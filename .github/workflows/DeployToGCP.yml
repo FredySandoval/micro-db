@@ -10,10 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Install dependencies
-        run: ~/.local/share/pnpm/pnpm install
+      # - name: Install dependencies
+      #  run: ~/.local/share/pnpm/pnpm install
       
-      - run: sh deploy.sh
+      - run: command -v fnm
+      
+      - run: command -v node
+      
+      - run: command -v pnpm
+      
+      - run: command -v pm2
       #- run: pm2 restart micro-db
       # - name: Restart pm2
       # run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
