@@ -30,18 +30,19 @@ if ! [ -x "$(command -v fnm)" ]; then
     # Append the String 'eval "$(fnm env --use-on-cd)"' to the end of the .bashrc file
     echo 'eval "$(fnm env --use-on-cd)"' >> ~/.bashrc
 
+    source ~/.bashrc
     # Reload the .bashrc file
+    fnm install v16.16.0
 else 
   echo 'node is installed.'
 fi
 
-source ~/.bashrc
 
 # Checking if fnm is installed
 if ! [ -x "$(command -v pm2)" ]; then
     echo 'Installing pm2...'
     # Install pm2
-    npm install -g pm2
+    pnpm install -g pm2
 else 
   echo 'node is installed.'
 fi
