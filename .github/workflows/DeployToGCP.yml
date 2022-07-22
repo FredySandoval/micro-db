@@ -13,7 +13,8 @@ jobs:
       - name: Install dependencies
         run: ~/.local/share/pnpm/pnpm install
       
-      - run: pm2 restart micro-db
+      - run: sh deploy.sh
+      #- run: pm2 restart micro-db
       # - name: Restart pm2
       # run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
       # run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
