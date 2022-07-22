@@ -44,3 +44,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+      
+      - name: Run main.mjs
+        run: node main.mjs
+      
+      - name: Run tests
+        run: pnpm run test
