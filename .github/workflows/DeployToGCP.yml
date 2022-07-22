@@ -13,6 +13,7 @@ jobs:
       - name: Install dependencies
         run: ~/.local/share/pnpm/pnpm install
       
-      - name: Restart pm2
+      - run: ls /home/shockerovip/.local/share/pnpm
+      # - name: Restart pm2
       # run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
-        run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
+      # run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
