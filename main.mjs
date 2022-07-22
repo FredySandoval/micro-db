@@ -10,7 +10,6 @@ import { limit_50max_15min } from './rate_limits/ratelimits.mjs';
 import { createcollection } from './routes/createcollection.mjs';
 app.use('/createcollection', limit_50max_15min, createcollection);
 
-
 import { limit_1000max_60min } from './rate_limits/ratelimits.mjs';
 import { find } from './routes/find.mjs';
 app.use('/find', limit_1000max_60min, find);

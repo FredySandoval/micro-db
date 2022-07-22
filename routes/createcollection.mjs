@@ -7,11 +7,16 @@ import { nanoid } from 'nanoid';
 import { join, dirname } from 'path'
 import { Low, JSONFile } from 'lowdb'
 import { fileURLToPath } from 'url'
+import { existsSync,writeFileSync } from 'fs';
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Load index.js file
 const index_file = join(__dirname, '..', 'collections_index', 'index.json');
+// check if index.json file exists if not create it
+if (!existsSync(index_file)) {
+    writeFileSync(index_file, '[]');
+}
 const index_adapter = new JSONFile(index_file);
 const index_db = new Low(index_adapter);
 
