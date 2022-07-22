@@ -14,16 +14,10 @@ jobs:
       - run: export PATH=/home/shockerovip/.fnm:$PATH
       - run: eval "`fnm env`"
       - run: eval "$(fnm env --use-on-cd)"
+      - run: echo $(node -v)
       #  run: ~/.local/share/pnpm/pnpm install
-      
-      - run: command -v fnm
-      
-      - run: command -v node
-      
-      - run: command -v pnpm
-      
-      - run: command -v pm2
-      #- run: pm2 restart micro-db
+
+      - run: pm2 restart micro-db2
       # - name: Restart pm2
       # run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
       # run: /home/shockerovip/.local/share/pnpm/pm2 restart micro-db
