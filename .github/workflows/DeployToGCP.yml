@@ -1,5 +1,5 @@
 
-name: Second action
+name: Deploy to GCP server
 
 on: [workflow_dispatch]
 
