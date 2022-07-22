@@ -13,6 +13,8 @@ jobs:
       # - name: Install dependencies
       #  run: ~/.local/share/pnpm/pnpm install
       
+      - run: eval "$(~/.fnm/fnm env)"
+      
       - run: command -v fnm
       
       - run: command -v node
