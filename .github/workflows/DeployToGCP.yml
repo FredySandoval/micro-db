@@ -10,13 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: try out nvm
-        shell: bash
-        run: fnm --version
-        
-      - name: try out nvm
-        shell: bash
-        run: pm2 --version
+      - run: bash deploy.sh
       
       # - name: Install dependencies
       # - run: export PATH=/home/shockerovip/.fnm:$PATH
