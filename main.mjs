@@ -1,7 +1,7 @@
 import express from 'express';
 import { networkInterfaces } from 'os';
 const app = express();
-app.set('trust proxy', 4);
+app.set('trust proxy', 1);
 app.use(express.json());
 
 app.get('/ip', (request, response) => response.send(request.ip));
