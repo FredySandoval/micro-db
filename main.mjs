@@ -5,6 +5,7 @@ app.set('trust proxy', 1);
 app.use(express.json());
 
 app.get('/ip', (request, response) => response.send(request.ip));
+app.get('/hostname', (request, response) => response.send(request.hostname));
 
 import { limit_50max_15min } from './rate_limits/ratelimits.mjs';
 import { createcollection } from './routes/createcollection.mjs';
