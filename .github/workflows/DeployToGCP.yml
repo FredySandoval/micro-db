@@ -14,4 +14,4 @@ jobs:
       
       - run: which node
       
-      - run: which pnpm
+      - run: bash which pnpm
