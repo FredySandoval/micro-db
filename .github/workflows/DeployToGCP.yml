@@ -18,6 +18,12 @@ jobs:
       
       - run: which pnpm
       
-      - run: export PNPM_HOME="/home/shockerovip/.local/share/pnpm" & export PATH="$PNPM_HOME:$PATH"
+      # - run: export PNPM_HOME="/home/shockerovip/.local/share/pnpm" & export PATH="$PNPM_HOME:$PATH"
+      
 
-      - run: pnpm install pm2 -g
+
+      # - run: pnpm install pm2 -g
+
+      - name: Display the path
+        run: echo $PATH
+        shell: bash
