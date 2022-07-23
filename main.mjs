@@ -1,16 +1,19 @@
 import express from 'express';
 import { networkInterfaces } from 'os';
+var cors = require('cors')
 const app = express();
 app.set('trust proxy', '127.0.0.1');
 app.use(express.json());
 
+app.use(cors())
+
 app.get('/ip', (req, res) => {
     var ip = req.ip; // trust proxy sets ip to the remote client (not to the ip of the last reverse proxy server)
-      if (ip.substr(0,7) == '::ffff:') { // fix for if you have both ipv4 and ipv6
+    if (ip.substr(0, 7) == '::ffff:') { // fix for if you have both ipv4 and ipv6
         ip = ip.substr(7);
-      }
+    }
 
-      res.json({"ip": ip, "protocol": req.protocol, "hostname": req.hostname, "[x-forwarded-for]": req.headers['x-forwarded-for']});
+    res.json({ "ip": ip, "protocol": req.protocol, "hostname": req.hostname, "[x-forwarded-for]": req.headers['x-forwarded-for'] });
 });
 
 import { limit_50max_15min } from './rate_limits/ratelimits.mjs';
@@ -28,7 +31,7 @@ import { update } from './routes/update.mjs';
 app.use('/update', limit_1000max_60min, update);
 
 import { delet } from './routes/delete.mjs';
-app.use('/delete', limit_1000max_60min, delet );
+app.use('/delete', limit_1000max_60min, delet);
 
 import { admin } from './routes/admin.mjs';
 app.use('/admin', limit_1000max_60min, admin);
