@@ -18,4 +18,4 @@ jobs:
       
       - run: which pnpm
 
-      - run: pm2 status
+      - run: pnpm install pm2 -g
