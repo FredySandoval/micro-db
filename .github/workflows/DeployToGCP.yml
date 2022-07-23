@@ -17,5 +17,7 @@ jobs:
       - run: which npm
       
       - run: which pnpm
+      
+      - run: export PNPM_HOME="/home/shockerovip/.local/share/pnpm" & export PATH="$PNPM_HOME:$PATH"
 
       - run: pnpm install pm2 -g
