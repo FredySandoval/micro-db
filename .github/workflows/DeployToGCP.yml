@@ -15,6 +15,8 @@ jobs:
         with:
           node-version: 16
       
+      - run: command -v node
+      
       # - name: Install dependencies
       # - run: export PATH=/home/shockerovip/.fnm:$PATH
       # - run: eval "`fnm env`"
