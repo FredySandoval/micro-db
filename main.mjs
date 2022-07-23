@@ -1,11 +1,17 @@
 import express from 'express';
 import { networkInterfaces } from 'os';
 const app = express();
-app.set('trust proxy', 1);
+app.set('trust proxy', '127.0.0.1');
 app.use(express.json());
 
-app.get('/ip', (request, response) => response.send(request.ip));
-app.get('/hostname', (request, response) => response.send(request.hostname));
+app.get('/ip', (req, res) => {
+    var ip = req.ip; // trust proxy sets ip to the remote client (not to the ip of the last reverse proxy server)
+      if (ip.substr(0,7) == '::ffff:') { // fix for if you have both ipv4 and ipv6
+        ip = ip.substr(7);
+      }
+
+      res.json({"ip": ip, "protocol": req.protocol, "hostname": req.hostname, "[x-forwarded-for]": req.headers['x-forwarded-for']});
+});
 
 import { limit_50max_15min } from './rate_limits/ratelimits.mjs';
 import { createcollection } from './routes/createcollection.mjs';
