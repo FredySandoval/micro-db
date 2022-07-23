@@ -13,3 +13,5 @@ jobs:
       - run: which fnm
       
       - run: which node
+      
+      - run: which pnpm
