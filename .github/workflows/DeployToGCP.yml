@@ -39,7 +39,7 @@ jobs:
         run: pnpm install
       
       - name: install pm2
-        run: pnpm install pm2 -g
+        run: npm install pm2 -g
       
      # - run: if [ -x "$(command -v pm2)" ]; then pm2 restart micro-db ; else pnpm install pm2 -g & pm2 start main.mjs --name=micro-db ; fi
       
