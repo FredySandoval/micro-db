@@ -21,9 +21,16 @@ jobs:
       # - run: export PNPM_HOME="/home/shockerovip/.local/share/pnpm" & export PATH="$PNPM_HOME:$PATH"
       
 
-
+      
       # - run: pnpm install pm2 -g
+      - name: Hello world
+        run: echo Hello world $FIRST_NAME $middle_name $Last_Name!
+        env:
+          FIRST_NAME: Mona
+          middle_name: The
+          Last_Name: Octocat
+      
 
       - name: Display the path
-        run: pnpm install pm2 -g
+        run: echo $PNPM_HOME
         shell: bash
