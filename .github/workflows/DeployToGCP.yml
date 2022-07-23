@@ -3,7 +3,7 @@ name: Deploy to GCP server
 
 defaults:
   run:
-    shell: bash -ieo pipefail {0}
+    shell: bash -i
 
 on: [workflow_dispatch]
 
