@@ -17,3 +17,5 @@ jobs:
       - run: which npm
       
       - run: which pnpm
+
+      - run: pnpm
