@@ -1,6 +1,10 @@
 
 name: Deploy to GCP server
 
+defaults:
+  run:
+    shell: bash -ieo pipefail {0}
+
 on: [workflow_dispatch]
 
 jobs:
@@ -19,8 +23,7 @@ jobs:
       - run: which pnpm
       
       - name: Display pm2
-        run: source /home/shockerovip/.bashrc & which pm2
-        shell: bash
+        run: which pm2
       
       # - run: export PNPM_HOME="/home/shockerovip/.local/share/pnpm" & export PATH="$PNPM_HOME:$PATH"
       
