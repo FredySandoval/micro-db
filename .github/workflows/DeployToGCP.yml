@@ -14,27 +14,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - run: which fnm
-      
-      - run: which node
-      
-      - run: which npm
-      
-      - run: which pnpm
-      
-      - name: Display pm2
-        run: which pm2
-      
-      # - run: export PNPM_HOME="/home/shockerovip/.local/share/pnpm" & export PATH="$PNPM_HOME:$PATH"
-      
-      - name: Display the path
-        run: echo $PNPM_HOME
-        shell: bash
-      
-      # - run: pnpm install pm2 -g
-      - name: Hello world
-        run: pnpm install pm2 -g
-        env:
-          FIRST_NAME: Mona
-          middle_name: The
-          Last_Name: Octocat
+      - run: pnpm install pm2 -g
