@@ -18,6 +18,8 @@ jobs:
       
       - run: which pnpm
       
+      - run: which pm2
+      
       # - run: export PNPM_HOME="/home/shockerovip/.local/share/pnpm" & export PATH="$PNPM_HOME:$PATH"
       
       - name: Display the path
