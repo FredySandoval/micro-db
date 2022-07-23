@@ -14,4 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - run: pnpm install pm2 -g
+      - run: pnpm install
+      
+      - run: pm2 restart micro-db
