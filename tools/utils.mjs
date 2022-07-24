@@ -126,15 +126,15 @@ import ipRangeCheck from 'ip-range-check';
 function check_restrictions(WICH_FILE, req, db) {
     // check websiterestrictions
     if (db.data?.websiterestrictions) {
-        const hostname = req.hostname;
-        if (db.data?.websiterestrictions.indexOf(hostname) == -1) {
+        const origin = req.get('origin');
+        if (db.data?.websiterestrictions.indexOf(origin) == -1) {
             return [ERROR_MESSAGE.unallowed(WICH_FILE, 'domain')];
-            // return res.status(403).send({ error: '1 you are not allowed to access this collection' });
         }
     }
     // check iprestrictions
     if (db.data?.iprestrictions) {
-        const ip = req.ip;
+        // const ip = req.ip;
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         const checkip = db.data?.iprestrictions?.some(iprange => {
             if (ipRangeCheck(ip, iprange)) {
                 return true;
@@ -142,7 +142,6 @@ function check_restrictions(WICH_FILE, req, db) {
         })
         if (!checkip) {
             return [ERROR_MESSAGE.unallowed(WICH_FILE, 'ip')];
-            // return res.status(403).json({ error: '2 you are not allowed to access this collection' });
         }
     }
     return [null];

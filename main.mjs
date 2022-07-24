@@ -1,11 +1,12 @@
 import express from 'express';
 import { networkInterfaces } from 'os';
-var cors = require('cors')
+// var cors = require('cors')
+import cors from 'cors';
 const app = express();
 app.set('trust proxy', '127.0.0.1');
 app.use(express.json());
 
-app.use(cors())
+app.use(cors());
 
 app.get('/ip', (req, res) => {
     var ip = req.ip; // trust proxy sets ip to the remote client (not to the ip of the last reverse proxy server)
@@ -13,7 +14,7 @@ app.get('/ip', (req, res) => {
         ip = ip.substr(7);
     }
 
-    res.json({ "ip": ip, "protocol": req.protocol, "hostname": req.hostname, "[x-forwarded-for]": req.headers['x-forwarded-for'] });
+    res.json({ "ip": ip, "protocol": req.protocol, "hostname": req.hostname, "[x-forwarded-for]": req.headers['x-forwarded-for'], "origin": req.headers.origin });
 });
 
 import { limit_50max_15min } from './rate_limits/ratelimits.mjs';
