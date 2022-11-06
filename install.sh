@@ -5,7 +5,7 @@ then
     echo "installing unzip..."
     sudo apt-get install unzip
 fi
-
+echo "fredy sandoval 1"
 command -v node
 if ! command -v node &> /dev/null
 then
