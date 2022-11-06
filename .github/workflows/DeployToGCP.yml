@@ -10,6 +10,9 @@ on: [workflow_dispatch]
 jobs:
   build:
     runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [16]
     
     steps:
       - uses: actions/checkout@v3
@@ -17,9 +20,13 @@ jobs:
       - uses: pnpm/action-setup@v2.2.4
         with:
           version: 6.0.2
-          run_install: |
-            - recursive: true
-            - args: [--global, pm2]
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       
 #       - run: pnpm install
       
