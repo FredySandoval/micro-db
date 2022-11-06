@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # if ! command -v unzip &> /dev/null
 # then
