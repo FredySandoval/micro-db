@@ -1,3 +1,4 @@
+#!/bin/bash
 if ! command -v unzip &> /dev/null
 then
     sudo apt-get install unzip
