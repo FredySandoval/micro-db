@@ -3,7 +3,7 @@ name: "simple workflow pm2 configuration"
 
 defaults:
   run:
-    shell: bash -ieo pipefail {0}
+    shell: bash
 
 #event, trigger action that running our Jobs.
 on: [workflow_dispatch]
