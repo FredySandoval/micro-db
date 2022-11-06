@@ -20,6 +20,8 @@
 #     echo "installing node"
 #     fnm install v16
 # fi
+export PATH=/home/$USER/.fnm:$PATH
+eval "`fnm env`"
 if ! [ -x "$(command -v node )" ]; then
     echo "Dependency node is not installed, Install it and run this script again"
 fi
