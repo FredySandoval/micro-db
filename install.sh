@@ -6,6 +6,7 @@ then
     sudo apt-get install unzip
 fi
 
+command -v node
 if ! command -v node &> /dev/null
 then
     echo "installing fnm"
