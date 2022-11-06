@@ -9,3 +9,4 @@ then
     echo "done FS1"
     source /home/$USER/.bashrc
 fi
+fnm
