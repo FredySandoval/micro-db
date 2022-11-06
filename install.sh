@@ -6,7 +6,7 @@ then
     sudo apt-get install unzip
 fi
 
-if ! command -v fnm &> /dev/null
+if ! command -v node &> /dev/null
 then
     echo "installing fnm"
     curl -fsSL https://fnm.vercel.app/install | bash
