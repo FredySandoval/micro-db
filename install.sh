@@ -5,5 +5,5 @@ fi
 if ! command -v fnm &> /dev/null
 then
     curl -fsSL https://fnm.vercel.app/install | bash
+    source /home/$USER/.bashrc
 fi
-
