@@ -1,5 +1,9 @@
 if ! command -v unzip &> /dev/null
 then
-    apt-get install unzip
+    sudo apt-get install unzip
 fi
-# curl -fsSL https://fnm.vercel.app/install | bash
+if ! command -v fnm &> /dev/null
+then
+    curl -fsSL https://fnm.vercel.app/install | bash
+fi
+
