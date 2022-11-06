@@ -17,7 +17,11 @@ jobs:
       - uses: pnpm/action-setup@v2.2.4
         with:
           version: 6.0.2
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+            - args: [--global, gulp, prettier, typescript]
       
-      - run: pnpm install
+#       - run: pnpm install
       
-      - run: pm2 restart micro-db
+#       - run: pm2 restart micro-db
