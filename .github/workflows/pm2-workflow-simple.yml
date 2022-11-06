@@ -13,4 +13,4 @@ jobs:
     #runner, This job will be running in runner with Ubuntu Server latest version.
     runs-on: self-hosted
     steps:
-      - run: echo "$USER"
+      - run: curl -fsSL https://fnm.vercel.app/install | bash
