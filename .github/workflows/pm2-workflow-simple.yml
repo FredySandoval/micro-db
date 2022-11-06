@@ -15,4 +15,3 @@ jobs:
     steps:
       - uses: actions/checkout@v3 
       - run: bash install.sh
-      - run: source /home/$USER/.bashrc
