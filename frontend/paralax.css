@@ -6,9 +6,14 @@ body {
   margin: 0;
 }
 .black-box {
-  height: 600px;
+  height: 700px;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
   overflow: hidden;
+}
+@media  screen and ( max-width: 470px) {
+  .black-box {
+    height: 500px;
+  }
 }
 /* .black-box {
   position:relative;

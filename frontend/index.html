@@ -5,14 +5,327 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="paralax.css">
+    <style>
+      *, *::before, *::after {
+          box-sizing: border-box;
+      }
+      body {
+          margin: 0;
+          overflow-x: hidden;
+      }
+      header {
+          position: relative;
+          height: 600px;
+      }
+      .background-stars {
+          background-color: #8080808c;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: -20;
+      }
+      .background-mountains {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          top: 0;
+          left: 0;
+          transform: translateY(60%);
+          z-index: -10;
+      }
+      .background-elements {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          top: 0;
+          left: 0;
+          --star-size: 140px;
+      }
+      @media screen and ( max-width: 1400px ) {
+          .background-elements {
+              --star-size: 100px;
+          }
+      }
+      .content {
+          z-index: 5;
+      }
+      .background-elements {
+          display: grid;
+          grid-template-columns: auto auto auto auto;
+          grid-template-rows: 80px auto auto auto auto;
+          padding: 30px 60px 0px 60px;
+      }
+      img:hover { 
+          filter:hue-rotate(100deg)
+      }
+      .background-elements > div {
+          color: white;
+      }
+      .be_banner {
+          grid-column: 1/3;
+          grid-row: 1/2;
+      }
+      .be_data-base {
+          position: relative;
+          grid-column: 3/4;
+          grid-row: 2/3;
+      }
+      .be_text {
+          grid-column: 1/3;
+          grid-row: 4/5;
+      }
+      .be_star {
+          position: relative;
+          grid-column: 3/4;
+          grid-row: 5/6;
+      }
+      .be_astronaut {
+          grid-column: 4/5;
+          grid-row: 3/6;
+          display: flex;
+          justify-content: center;
+          position: relative;
+      }
+      .be_star > img#star2 {
+          position: absolute;
+          width: var(--star-size);
+          right: 0;
+          bottom: 0;
+      }
+      .be_astronaut > img#astronaut {
+          position: absolute;
+          height: 100%;
+      }
+      .be_astronaut > img#star1 ,
+      .be_astronaut > img#star2 ,
+      .be_astronaut > img#star3 {
+          position: absolute;
+          width: var(--star-size);
+      }
+      .be_astronaut > img#star1{
+          left: -100px;
+      }
+      .be_astronaut > img#star2 {
+          left: -100px;
+          bottom: 0px;
+      }
+      .be_astronaut > img#star3 {
+          right: 0;
+          top:-100px;
+      }
+      .be_data-base > img#database {
+          position: absolute;
+          width: 70%;
+          left: 0px;
+          top: 0px;
+      }
+      @media screen and ( max-width: 800px ) {
+          .background-elements {
+              grid-template-columns: auto auto auto auto;
+              grid-template-rows: auto auto auto auto;
+              padding: 30px 20px 0px 20px;
+          }
+          .be_banner {
+              grid-column: 1/4;
+              grid-row: 1/2;
+          }
+          .be_data-base {
+              grid-column: 1/2;
+              grid-row: 2/3;
+          }
+          .be_astronaut {
+              grid-column: 3/5;
+              grid-row: 2/4;
+          }
+          .be_text {
+              grid-column: 1/5;
+              grid-row: 4/5;
+          }
+      
+      }
+      .bnnr_box {
+          --color-yellow: #ad961d;
+          border: 1px solid #ad961d;
+          width: 80%;
+          height: 80%;
+          border-radius: 15px;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          font-size: 20px;
+          color: #d7e2fd;
+      }
+      .bnnr_box span:nth-of-type(1),
+      .bnnr_box span:nth-of-type(2),
+      .bnnr_box span:nth-of-type(3) 
+      {
+          position: relative;
+      }
+      .bnnr_box span:nth-of-type(1)::before,
+      .bnnr_box span:nth-of-type(2)::before,
+      .bnnr_box span:nth-of-type(3)::before {
+          position: absolute;
+          content: "";
+          left: -13px;
+          top: 8px;
+          border-left: 3px solid var(--color-yellow);
+          border-bottom: 3px solid var(--color-yellow);
+          height: 6px;
+          width: 10px;
+          transform: rotate(-45deg);
+      
+      }
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
+      .be_text {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+      }
+      .txt_heading {
+          border-bottom: 1px solid #80808030;
+          font-family: 'Inter', sans-serif;
+          font-weight: 900;
+          font-size: 5vw;
+          color: #cad9ff;
+      }
+      .txt_content {
+          padding-top: 10px;
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+          font-size: 1.4vw;
+          color: #cad9ff;
+      }
+    </style>
   </head>
   <body> 
-    <div class="black-box"> 
-      <div id="stars"></div>
-      <div id="stars2"></div>
-      <div id="stars3"></div>
-      <div id="title"></div>
+    <div class="body-wrapper">
+      <header>
+        <div class="background-stars">
+          <link rel="stylesheet" type="text/css" href="paralax.css">
+          <body> 
+            <div class="black-box"> 
+              <div id="stars"></div>
+              <div id="stars2"></div>
+              <div id="stars3"></div>
+              <div id="title"></div>
+            </div>
+          </body>
+        </div>
+        <div class="background-mountains"><svg viewBox="0 0 1520 1203" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="Frame 1" clip-path="url(#clip0_113_4)">
+        <path id="Vector 2"
+            d="M150.375 188.842C-158.58 226.34 -102.019 312.652 -87.5023 1165.5C-83.4172 1405.5 1531.18 1280.93 1578.18 1236.09C1625.27 1191.16 1667.21 200.753 1514.57 135.536C1348.02 64.3681 1148.37 21.3522 961.515 78.3488C784.595 132.314 722.101 142.845 591.512 158.844C486.182 171.749 363.33 162.996 150.375 188.842Z"
+            fill="url(#paint0_linear_113_4)" filter="url(#f1)" />
+    </g>
+    <defs>
+        <linearGradient id="paint0_linear_113_4" x1="745.99" y1="111.589" x2="775.523" y2="1016.86"
+        gradientUnits="userSpaceOnUse">
+        <stop stop-color="#153ECD" />
+        <stop offset="1" stop-color="white" />
+    </linearGradient>
+    <clipPath id="clip0_113_4">
+        <rect width="1520" height="1203" fill="white" />
+    </clipPath>
+    <filter id="f1" x="0" y="0">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+    </filter>
+</defs>
+</svg>
+        </div>
+        <div class="background-elements">
+          <div class="be_banner">
+            <div class="bnnr_box"><span>FAST</span><span>RELIABLE</span><span>SIMPLE</span></div>
+          </div>
+          <div class="be_data-base"><img class="shake-crazy" id="database" src="./assets/database.png" alt="database_logo"></div>
+          <div class="be_text">
+            <div class="txt_heading"> <span id="sp_heading">MicroDBs</span></div>
+            <div class="txt_content">Create small database collections simple and free</div>
+          </div>
+          <div class="be_astronaut">
+            <link rel="stylesheet" href="crazy-shake.css"><img id="astronaut" src="./assets/astronaut8.png" alt="astronaut_logo"><img class="shake-crazy" id="star1" src="./assets/star1.png" alt="star_logo"><img class="shake-crazy" id="star2" src="./assets/star2.png" alt="star_logo"><img class="shake-crazy" id="star3" src="./assets/star3.png" alt="star_logo">
+          </div>
+        </div>
+      </header>
+      <style>
+        .content {
+            color: red;
+            display: flex;
+            justify-content: center;
+            padding-top: 100px;
+        }
+        .cntnt_box {
+            border: 5px solid #838383;
+            background-color: white;
+            border-radius: 20px;
+            width: 60%;
+            height: 1000px;
+        }
+      </style>
+      <div class="content">
+        <div class="cntnt_box"></div>
+      </div>
     </div>
+    <script>
+      (function() {
+          const database = document.getElementById("database");
+          document.onmousemove = throttle( handleMouseMove, 10);
+              function handleMouseMove(event) {
+                  var eventDoc, doc, body;
+      
+                  event = event || window.event; // IE-ism
+      
+                  // If pageX/Y aren't available and clientX/Y are,
+                  // calculate pageX/Y - logic taken from jQuery.
+                  // (This is to support old IE)
+                  if (event.pageX == null && event.clientX != null) {
+                      eventDoc = (event.target && event.target.ownerDocument) || document;
+                      doc = eventDoc.documentElement;
+                      body = eventDoc.body;
+      
+                      event.pageX = event.clientX +
+                        (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+                        (doc && doc.clientLeft || body && body.clientLeft || 0);
+                      event.pageY = event.clientY +
+                        (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+                        (doc && doc.clientTop  || body && body.clientTop  || 0 );
+                  }
+      
+                  //- console.log(window.innerWidth);
+                  // Use event.pageX / event.pageY herehh
+                  //- console.log(event.pageX, event.pageY);
+                  let x = Math.floor(map(event.pageX, 0, window.innerWidth, -50, 50));
+                  let y = Math.floor(map(event.pageY, 0, window.innerHeight, -50, 50));
+                  database.style.left = `${x}px`;
+                  database.style.top = `${y}px`;
+              }
+              function throttle(callback, interval) {
+                let enableCall = true;
+      
+                return function(...args) {
+                  if (!enableCall) return;
+      
+                  enableCall = false;
+                  callback.apply(this, args);
+                  setTimeout(() => enableCall = true, interval);
+                }
+              }
+      })();
+      function map(n, start1, stop1, start2, stop2, withinBounds) {
+          const newval = (n - start1) / (stop1 - start1) * (stop2 - start2) + start2;
+          if (!withinBounds) {
+            return newval;
+          }
+          if (start2 < stop2) {
+            return constrain(newval, start2, stop2);
+          } else {
+            return constrain(newval, stop2, start2);
+          }
+      };
+      function constrain(n, low, high) {
+        return Math.max(Math.min(n, high), low);
+      };
+    </script>
   </body>
 </html>
