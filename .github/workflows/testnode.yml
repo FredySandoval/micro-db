@@ -1,0 +1,15 @@
+name: "testnode"
+
+defaults:
+  run:
+    shell: bash
+
+#event, trigger action that running our Jobs.
+on: [workflow_dispatch]
+
+jobs:
+  pm2-configuration:
+    #runner, This job will be running in runner with Ubuntu Server latest version.
+    runs-on: self-hosted
+    steps:
+      - run: node --version
