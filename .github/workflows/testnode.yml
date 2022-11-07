@@ -2,7 +2,7 @@ name: "testnode"
 
 defaults:
   run:
-    shell: bash
+    shell: bash -l {0}
 
 #event, trigger action that running our Jobs.
 on: [workflow_dispatch]
@@ -12,5 +12,4 @@ jobs:
     #runner, This job will be running in runner with Ubuntu Server latest version.
     runs-on: self-hosted
     steps:
-      - run: echo $PATH
-      - run: command -v /run/user/1000/fnm_multishells/14881_1667791279251/bin/node
+      - run: $PATH
