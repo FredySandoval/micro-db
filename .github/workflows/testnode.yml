@@ -12,4 +12,5 @@ jobs:
     #runner, This job will be running in runner with Ubuntu Server latest version.
     runs-on: self-hosted
     steps:
+      - run: export PATH=/home/$USER/.fnm:$PATH & eval "`fnm env`"
       - run: node --version
