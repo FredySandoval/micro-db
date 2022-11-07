@@ -14,3 +14,4 @@ jobs:
     steps:
       - name: Display the path
         run: echo $PATH
+      - run: command -v node
