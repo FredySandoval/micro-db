@@ -2,7 +2,7 @@ name: "testnode"
 
 defaults:
   run:
-    shell: bash --login
+    shell: bash {0} --login
 
 #event, trigger action that running our Jobs.
 on: [workflow_dispatch]
