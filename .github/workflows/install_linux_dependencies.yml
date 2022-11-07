@@ -1,5 +1,5 @@
 #workflow name
-name: "simple workflow pm2 configuration"
+name: "Install linux dependencies"
 
 defaults:
   run:
