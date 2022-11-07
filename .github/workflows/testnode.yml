@@ -13,3 +13,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: echo $PATH
+      - run: |
+          echo "export PATH=$PATH:$GITHUB_WORKSPACE/vendor/bin" &gt;&gt; ~/.bash_profile
+          source ~/.bash_profile
+          cat ~/.bash_profile
