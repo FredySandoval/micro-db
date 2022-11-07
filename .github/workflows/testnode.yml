@@ -12,8 +12,6 @@ jobs:
     #runner, This job will be running in runner with Ubuntu Server latest version.
     runs-on: self-hosted
     steps:
-      - run: echo $PATH
-      - run: |
-          echo "export PATH=$PATH:$GITHUB_WORKSPACE/vendor/bin" &gt;&gt; ~/.bashrc
-          source ~/.bashrc
-          cat ~/.bashrc
+      - name: Display the path
+        run: echo $PATH
+        shell: bash
