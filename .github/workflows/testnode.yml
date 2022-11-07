@@ -13,3 +13,4 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: echo $PATH
+      - run: command -v /run/user/1000/fnm_multishells/14881_1667791279251/bin/node
