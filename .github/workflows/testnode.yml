@@ -2,7 +2,7 @@ name: "testnode"
 
 defaults:
   run:
-    shell: bash -l {0}
+    shell: bash -ieo pipefail {0}
 
 #event, trigger action that running our Jobs.
 on: [workflow_dispatch]
@@ -14,4 +14,3 @@ jobs:
     steps:
       - name: Display the path
         run: echo $PATH
-        shell: bash
