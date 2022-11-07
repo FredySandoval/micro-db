@@ -2,7 +2,7 @@ name: "testnode"
 
 defaults:
   run:
-    shell: bash -ieo pipefail {0}
+    shell: bash --noprofile --norc -eo pipefail {0}
 
 #event, trigger action that running our Jobs.
 on: [workflow_dispatch]
