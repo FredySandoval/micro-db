@@ -1,5 +1,6 @@
 const axios = require('axios');
-const baseUrl = 'http://localhost:5000';
+const baseUrl = process.argv.slice(2) ? process.argv.slice(2)[0].split('=')[1] : 'http://localhost:5000' ;
+console.log('baseUrl=', baseUrl);
 const {
     BASIC_COLLECTION,
     FULL_COLLECTION } = require('../tools/schema_for_test.js');

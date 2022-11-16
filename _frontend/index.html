@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-
-    <title>MicroDBs</title>
+    <title>Document</title>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
       *, *::before, *::after {
           box-sizing: border-box;
       }
@@ -59,9 +56,6 @@
           grid-template-columns: auto auto auto auto;
           grid-template-rows: 80px auto auto auto auto;
           padding: 30px 60px 0px 60px;
-      }
-      img {
-          transition: filter 0.3s;
       }
       img:hover { 
           filter:hue-rotate(100deg)
@@ -183,6 +177,7 @@
           transform: rotate(-45deg);
       
       }
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
       .be_text {
           position: relative;
           display: flex;
@@ -208,7 +203,7 @@
     <div class="body-wrapper">
       <header>
         <div class="background-stars">
-          <link rel="stylesheet" type="text/css" href="./src/components/paralax.css">
+          <link rel="stylesheet" type="text/css" href="paralax.css">
           <body> 
             <div class="black-box"> 
               <div id="stars"></div>
@@ -243,13 +238,13 @@
           <div class="be_banner">
             <div class="bnnr_box"><span>FAST</span><span>RELIABLE</span><span>SIMPLE</span></div>
           </div>
-          <div class="be_data-base"><img class="shake-crazy" id="database" src="./src/assets/database.png" alt="database_logo"></div>
+          <div class="be_data-base"><img class="shake-crazy" id="database" src="./assets/database.png" alt="database_logo"></div>
           <div class="be_text">
             <div class="txt_heading"> <span id="sp_heading">MicroDBs</span></div>
             <div class="txt_content">Create small database collections simple and free</div>
           </div>
           <div class="be_astronaut">
-            <link rel="stylesheet" href="./src/components/crazy-shake.css"><img id="astronaut" src="./src/assets/astronaut8.png" alt="astronaut_logo"><img class="shake-crazy" id="star1" src="./src/assets/star1.png" alt="star_logo"><img class="shake-crazy" id="star2" src="./src/assets/star2.png" alt="star_logo"><img class="shake-crazy" id="star3" src="./src/assets/star3.png" alt="star_logo">
+            <link rel="stylesheet" href="crazy-shake.css"><img id="astronaut" src="./assets/astronaut8.png" alt="astronaut_logo"><img class="shake-crazy" id="star1" src="./assets/star1.png" alt="star_logo"><img class="shake-crazy" id="star2" src="./assets/star2.png" alt="star_logo"><img class="shake-crazy" id="star3" src="./assets/star3.png" alt="star_logo">
           </div>
         </div>
       </header>
@@ -265,13 +260,11 @@
             background-color: white;
             border-radius: 20px;
             width: 60%;
-            /*height: 1000px;*/
-            padding: 10px;
-            /*overflow: hidden;*/
+            height: 1000px;
         }
       </style>
       <div class="content">
-        <div class="cntnt_box" id="app"></div>
+        <div class="cntnt_box"></div>
       </div>
     </div>
     <script>
@@ -334,6 +327,5 @@
         return Math.max(Math.min(n, high), low);
       };
     </script>
-    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -6,7 +6,6 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Document
         style.
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
             *, *::before, *::after {
                 box-sizing: border-box;
             }
@@ -57,9 +56,6 @@ html(lang="en")
                 grid-template-columns: auto auto auto auto;
                 grid-template-rows: 80px auto auto auto auto;
                 padding: 30px 60px 0px 60px;
-            }
-            img {
-                transition: filter 0.3s;
             }
             img:hover { 
                 filter:hue-rotate(100deg)
@@ -181,6 +177,7 @@ html(lang="en")
                 transform: rotate(-45deg);
 
             }
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
             .be_text {
                 position: relative;
                 display: flex;
@@ -204,9 +201,9 @@ html(lang="en")
         .body-wrapper
             header
                 .background-stars
-                    include src/components/paralax_background.pug
+                    include paralax_background.pug
                 .background-mountains
-                    include src/components/Frame2.html
+                    include Frame2.html
                 .background-elements
                     .be_banner
                         .bnnr_box
@@ -214,17 +211,17 @@ html(lang="en")
                             span RELIABLE
                             span SIMPLE
                     .be_data-base
-                        img.shake-crazy#database(src="./src/assets/database.png", alt="database_logo")
+                        img.shake-crazy#database(src="./assets/database.png", alt="database_logo")
                     .be_text
                         .txt_heading 
                             span#sp_heading MicroDBs
                         .txt_content Create small database collections simple and free
                     .be_astronaut
-                        link(rel="stylesheet", href="./src/components/crazy-shake.css")
-                        img#astronaut(src="./src/assets/astronaut8.png", alt="astronaut_logo")
-                        img.shake-crazy#star1(src="./src/assets/star1.png", alt="star_logo")
-                        img.shake-crazy#star2( src="./src/assets/star2.png", alt="star_logo")
-                        img.shake-crazy#star3(src="./src/assets/star3.png", alt="star_logo")
+                        link(rel="stylesheet", href="crazy-shake.css")
+                        img#astronaut(src="./assets/astronaut8.png", alt="astronaut_logo")
+                        img.shake-crazy#star1(src="./assets/star1.png", alt="star_logo")
+                        img.shake-crazy#star2( src="./assets/star2.png", alt="star_logo")
+                        img.shake-crazy#star3(src="./assets/star3.png", alt="star_logo")
             style.
                 .content {
                     color: red;
@@ -237,12 +234,10 @@ html(lang="en")
                     background-color: white;
                     border-radius: 20px;
                     width: 60%;
-                    /*height: 1000px;*/
-                    padding: 10px;
-                    /*overflow: hidden;*/
+                    height: 1000px;
                 }
             .content
-                .cntnt_box#app
+                .cntnt_box
         script.
             (function() {
                 const database = document.getElementById("database");
@@ -302,4 +297,3 @@ html(lang="en")
             function constrain(n, low, high) {
               return Math.max(Math.min(n, high), low);
             };
-        script(type='module' src='/src/main.js')
